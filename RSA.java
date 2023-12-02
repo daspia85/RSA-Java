@@ -74,10 +74,18 @@ public class RSA {
 			return 1;
 		}
 		if (p == 1) {
-			return b;
+			return b % m;
 		}
-		return modPower(b, p/2, m) * modPower(b, p/2, m) * modPower(b, p%2, m) % m;
+		long temp = modPower(b, p / 2, m);
+		long result = (temp * temp) % m;
+	
+		if (p % 2 == 1) {
+			result = (result * b) % m;
+		}
+	
+		return result;
 	}
+	
 
 	/**
      * Find a random prime number
@@ -86,11 +94,11 @@ public class RSA {
      * @author Luke Lachowicz
      * 
      */
-    public static long randPrime(int m, int n, Random rand) 
+    public long randPrime(int m, int n, Random rand) 
     {
         while (true) {
             // creates random number between m and n.
-            long randomNum = m + rand.nextInt(n - m + 1);
+            long randomNum = m + rand.nextLong(n - m + 1);
             // if statement to make sure the number generated is an odd number.
             if (randomNum % 2 == 0) {
                 randomNum++;
@@ -123,7 +131,7 @@ public class RSA {
      * @return a random number relatively prime to n
      * @author Luke Lachowicz
      */
-    public static long relPrime(long n, Random rand) 
+    public long relPrime(long n, Random rand) 
     {
         long randomNum;
         boolean primeNum;
@@ -155,7 +163,7 @@ public class RSA {
      * @return the two digit number beginning at position p of msg as a long int
      * @author Luke Lachowicz
      */
-    public static long toLong(String msg, int p) 
+    public long toLong(String msg, int p) 
     {
         // if statement to make sure p is not less than zero or has insufficient length.
         // returns 0 if this is the case.
@@ -192,7 +200,7 @@ public class RSA {
      * @return the string made up of two numeric digits representing x
      * @author Luke Lachowicz
      */
-    public static String longTo2Chars(long x) 
+    public String longTo2Chars(long x) 
     {
         // shift right 8 bits.
         int firstChar = (char) x >> 8;
@@ -203,4 +211,31 @@ public class RSA {
         // returns the result.
         return result;
     }
+
+	public static void main (String args[]) { 	
+		Person Alice = new Person();
+		Person Bob = new Person();
+
+		String msg = new String ("Bob, let's have lunch."); 	// message to be sent to Bob
+		long []  cipher;
+		cipher =  Alice.encryptTo(msg, Bob);			// encrypted, with Bob's public key
+
+		System.out.println ("Message is: " + msg);
+		System.out.println ("Alice sends:");
+		show (cipher);
+
+		System.out.println ("Bob decodes and reads: " + Bob.decrypt (cipher));	// decrypted,
+									// with Bob's private key.
+		System.out.println ();
+
+		msg = new String ("No thanks, I'm busy");
+		cipher = Bob.encryptTo (msg, Alice);
+		
+		System.out.println ("Message is: " + msg);
+		System.out.println ("Bob sends:");
+		show (cipher);
+
+		System.out.println ("Alice decodes and reads: " + Alice.decrypt (cipher));
+	}
+	
 }

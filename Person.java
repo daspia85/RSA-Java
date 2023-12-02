@@ -65,11 +65,11 @@ public class Person {
 	 * @author Pial Das
 	 */
 	public String decrypt(long[] cipher) {
-		String plaintext = "";
+		StringBuilder plaintext = new StringBuilder();
 		for (int i = 0; i < cipher.length; i++) {  // Iterate over each long in the array (which is ciphertext representing a character) and decrypt using the RSA decryption formula. The result will be stored in a string.
 			long cipher_char = cipher[i];
-			plaintext += ((char) rsa.modPower(cipher_char, priv_exp, modulus));  // The RSA decryption formula with the result casted as a char and appended to the string.
+			plaintext.append ((char) rsa.modPower(cipher_char, priv_exp, modulus));  // The RSA decryption formula with the result casted as a char and appended to the string.
 		}
-		return plaintext;
+		return plaintext.toString();
 	}
 }
