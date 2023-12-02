@@ -1,0 +1,4 @@
+Description of which aspects of this project work ok and which do not work ok, if any.
+-  All parts of the project work with no errors. It correctly encrypts and decrypts messages. 
+Description of what you would do to improve this work if you had more time.
+-  If we had more time, we would clean up our code more, add more descriptive comments, and make methods more efficient. 
